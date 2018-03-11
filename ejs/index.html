@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>test artTemplate</title>
+</head>
+<body>
+	
+
+    <div id="testDiv">
+    </div>
+    <hr/>
+    <div id="testDiv2">
+    </div>
+    <hr/>
+    <div id="testDiv3">
+    </div>
+    <hr/>
+    <div id="testDiv4">
+    </div>
+
+
+  
+    <script type="text/html" id="testData">
+   
+    	{{#title}}
+        {{include "beIncluded"}}
+    </script>
+    <script type="text/html" id="beIncluded">
+        <p>name: {{name}}</p>
+        <p>age: {{age}}</p>
+    </script>
+
+
+    <script type="text/html" id="testData2">
+        {{#title}}
+        {{title}}
+        <ul>
+            {{each food as f index}}
+            <li>{{f.apple}}</li>
+            {{/each}}
+        </ul>
+    </script>
+
+    <script type="text/html" id="testData3">
+        {{#title}}
+        {{if flag > 0.5}}
+            <p>随机数 {{flag}} > 0.5</p>
+            <p>随机数toFixed方法截取2位小数：{{flag.toFixed(2)}}</p>
+        {{else}}
+            <p>随机数 {{flag}} < 0.5</p>
+            <p>随机数转为字符串slice方法截取2位小数：{{flag.toString().slice(0,4)}}</p>
+        {{/if}}
+
+    </script>
+
+    <script type="text/html" id="testData4">
+        {{#title}}
+        <p>a = {{a}}    b = {{b}}</p>
+        <p>a + b =  {{plus(a,b)}}</p>
+        <p>a * b =  {{multiply(a,b)}}</p>
+    </script>
+
+
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <script src="js/template.js"></script>
+    <script src="js/test.js"></script>
+</body>
+</html>

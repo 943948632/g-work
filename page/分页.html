@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+
+
+<html>
+
+	<head>
+		<meta name="viewport" content="width=device-width" />
+		<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+		<script src="js/kkpager.js"></script>
+		<link href="js/kkpager_orange.css" rel="stylesheet" />
+		<title>Index</title>
+	</head>
+
+	<body>
+		<div style="width:800px;margin:0 auto;">
+			<div class="table-responsive" id="mainContent">
+			</div>
+			<div id="kkpager">
+
+			</div>
+		</div>
+	</body>
+
+</html>
+<script type="text/javascript">
+	function getParameter(name) {
+		var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+		var r = window.location.search.substr(1).match(reg);
+		if(r != null) return unescape(r[2]);
+		return null;
+	}
+
+	function GetExcelTable(pageindex) {
+		$.ajax({
+			url: pageindex + 'new.json',
+			dataType: "json",
+			type: "get",
+			//          data: { "pageIndex": pageindex },
+			success: function(data) {
+				if(data.status == "0") {
+					$("#mainContent").empty();
+					$("#mainContent").html("<div style='text-align:center; color:red'><h2>暂无数据</h2></div>");
+					return;
+				}
+				$("#mainContent").html(data.data);
+				//定义分页样式
+				var totalCount = parseInt(data.page.pages);
+				var pageSize = parseInt(data.page.pernum);
+
+				var pageNo = getParameter('pageIndex'); //该参数为插件自带，不设置好，调用数据的时候当前页码会一直显示在第一页
+
+				if(!pageNo) {
+					pageNo = pageindex;
+				}
+				var totalPages = totalCount % pageSize == 0 ? totalCount / pageSize : (parseInt(totalCount / pageSize) + 1);
+				kkpager.generPageHtml({
+					pno: pageNo,
+					total: totalPages,
+					totalRecords: totalCount,
+					isShowFirstPageBtn: false,
+					isShowLastPageBtn: false,
+					mode: 'click',
+					click: function(n) {
+						this.selectPage(pageNo);
+						searchPage(n);
+						return false;
+					}
+				}, true);
+			},
+			error: function(jqXHR, textStatus, errorThrown) {
+
+			}
+		});
+	}
+	//init
+	$(function() {
+		GetExcelTable(1)
+	});
+	//ajax翻页
+	function searchPage(n) {
+		GetExcelTable(n);
+	}
+</script>
